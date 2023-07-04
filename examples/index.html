@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <title>Fetch proxy Demo</title>
+  <style>
+    html {
+      font-size: 20px;
+    }
+  </style>
+  <script src="../dist/fetch-proxy.js"></script>
+  <script type="text/javascript">
+    console.log("fetchProxy:", window.fetchProxy)
+    const { originalFetch, unProxy } = fetchProxy({
+      onRequest: (config, handler) => {
+        console.log("fetchproxy onRequest:", config)
+        if (config.url === 'http://localhost:3000/api/a') {
+          // Block the request and mock a normal response.
+          const mockBody = JSON.stringify({
+            name:"Hello mock"
+          })
+          const mockOptions = { status: 200, statusText: "OK" }
+          const response = new Response(mockBody, mockOptions)
+          handler.resolve({
+            config,
+            response
+          })
+        }
+        else if (config.url === 'http://localhost:3000/api/b') {
+          // Modify the request parameters and config to continue the request.
+          config.url = 'http://localhost:3000/api/c'
+          const formData = new URLSearchParams()
+          formData.append('name', "1234")
+          config.init = {
+            body: formData,
+            ...config.init
+          }
+          handler.next(config)
+        }
+        else if (config.url === 'http://localhost:3000/api/c') {
+          // Block the request and mock the request failure.
+          const error = new Error("fetch is blocked")
+          handler.reject({
+            config,
+            error
+          })
+        }
+        else {
+          // Invoke the next step asynchronously.
+          setTimeout(() => {
+            console.log("异步调用handler.next")
+            handler.next(config)
+          }, 1000)
+        }
+      },
+      // Enter when a request encounters an error
+      onError: (err, handler) => {
+        console.log("fetchproxy onError:", err)
+        if (err.config.url === 'http://localhost:4000/api/e') {
+          // When the request encounters an error, but mock the success response.
+          const mockBody = JSON.stringify({
+            name: "Hello Err",
+            id: 124
+          })
+          const mockOptions = { status: 200, statusText: "OK" }
+          const response = new Response(mockBody, mockOptions)
+          handler.resolve({
+            config: err.config,
+            response
+          })
+        }
+        else {
+          handler.next(err)
+        }
+      },
+      // Enter when the request response success
+      onResponse: (response, handler) => {
+        console.log("fetchproxy onResponse:", response)
+        if (response.config.url === 'http://localhost:3000/api/d') {
+          // Request successful, but mock response data.
+          const newResponse = response.response.clone()
+          const mockBody = JSON.stringify("fetch is blocked")
+          const mockOptions = { status: 200, statusText: "fetch is blocked" }
+          const mockResponse = new Response(mockBody, mockOptions)
+          response.response = mockResponse
+          handler.next(response)
+
+          // Request successful, but mock request failed.
+          // const error = new Error("fetch is blocked")
+          // handler.reject({
+          //   config: response.config,
+          //   error
+          // })
+        }
+        else {
+          // Normal response.
+          handler.next(response)
+        }
+      }
+    })
+    console.log("originalFetch, unProxy:", originalFetch, unProxy)
+  </script>
+  <script type="text/javascript">
+    // Use a constant URL for testing each time.
+    const url = 'http://localhost:3000/api/a'
+    // const url = 'http://localhost:3000/api/b'
+    // const url = 'http://localhost:3000/api/c'
+    // const url = 'http://localhost:3000/api/d'
+    // const url = 'http://localhost:4000/api/e'
+    // const url = 'http://localhost:4000/api/f'
+    fetch(url, {
+      method: 'POST',
+    })
+      .then((response) => {
+        return response.json()
+      })
+      .then(data => {
+        console.log("fetch return data:", data)
+      })
+      .catch((error) => {
+        console.log("fetch error:", error)
+      });
+  </script>
+</head>
+
+<body>
+  <div style="font-size: 32px; color: #e21212; height: 200px; text-align: center">
+    <div style="padding-top: 50px">Fetch Proxy Demo</div>
+    <span style="font-size: 20px;color: #333;">
+      open console panel to view log.
+    </span>
+  </div>
+</body>
+
+</html>
