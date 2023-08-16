@@ -10,10 +10,10 @@
       font-size: 20px;
     }
   </style>
-  <script src="../dist/fetch-proxy.js"></script>
+  <script src="../dist/web-fetch-proxy.js"></script>
   <script type="text/javascript">
-    console.log("fetchProxy:", window.fetchProxy)
-    const { originalFetch, unProxy } = fetchProxy({
+    console.log("webFetchProxy:", window.webFetchProxy)
+    const { originalFetch, unProxy } = webFetchProxy({
       onRequest: (config, handler) => {
         console.log("fetchproxy onRequest:", config)
         if (config.url === 'http://localhost:3000/api/a') {

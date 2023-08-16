@@ -1,5 +1,5 @@
 /*!
- * fetch-proxy.js - 1.0.0 - 2023-07-04
+ * web-fetch-proxy.js - 1.0.0 - 2023-08-16
  * 
  * Copyright (c) 2023 txiejun;
  * Licensed under the MIT license
@@ -7,7 +7,7 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define(factory) :
-	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.fetchProxy = factory());
+	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.webFetchProxy = factory());
 })(this, (function () { 'use strict';
 
 	function unwrapExports (x) {
@@ -119,11 +119,11 @@
 	    unProxy: unProxy
 	  };
 	}
-	function fetchProxy(proxy, win) {
+	function webFetchProxy(proxy, win) {
 	  win = win || window;
 	  return proxyFetch(proxy, win);
 	}
 
-	return fetchProxy;
+	return webFetchProxy;
 
 }));

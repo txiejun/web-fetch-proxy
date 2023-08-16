@@ -1,8 +1,8 @@
 {
-  "name": "fetch-proxy",
-  "version": "1.0.0",
+  "name": "web-fetch-proxy",
+  "version": "0.7.0",
   "description": "proxying fetch function in browser",
-  "main": "dist/fetch-proxy.js",
+  "main": "dist/web-fetch-proxy.js",
   "scripts": {
     "service": "node ./examples/server.js",
     "build": "rollup --config rollup.config.js",
@@ -12,13 +12,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/txiejun/fetch-proxy.git"
+    "url": "git+https://github.com/txiejun/web-fetch-proxy.git"
   },
   "keywords": [
     "fetch",
     "proxy",
     "intercept",
-    "fetch-proxy",
+    "web-fetch-proxy",
     "fetch proxy",
     "fetch hook",
     "intercept fetch"
@@ -30,9 +30,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/txiejun/fetch-proxy/issues"
+    "url": "https://github.com/txiejun/web-fetch-proxy/issues"
   },
-  "homepage": "https://github.com/txiejun/fetch-proxy#readme",
+  "homepage": "https://github.com/txiejun/web-fetch-proxy#readme",
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/plugin-proposal-class-properties": "^7.8.3",

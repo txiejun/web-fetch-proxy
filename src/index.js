@@ -98,7 +98,7 @@ function proxyFetch(proxy, win) {
   }
 }
 
-export default function fetchProxy(proxy, win) {
+export default function webFetchProxy(proxy, win) {
   win = win || window;
   return proxyFetch(proxy, win)
 }

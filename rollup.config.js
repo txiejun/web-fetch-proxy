@@ -73,5 +73,5 @@ function getConfig(input, outputFileName, name) {
 }
 
 export default [
-    getConfig('src/index.js', 'fetch-proxy', 'fetchProxy'),
+    getConfig('src/index.js', 'web-fetch-proxy', 'webFetchProxy'),
 ]
